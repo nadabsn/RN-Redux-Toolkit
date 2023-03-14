@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, {useState, useEffect} from 'react';
@@ -17,13 +18,11 @@ function Todo() {
   const list = useSelector(state => state.todoReducer.list);
   const objects = useSelector(state => state.objectReducer.objects);
   const [task, setTask] = useState('');
-  const [pressed, setPressed] = useState(false);
   const dispatch = useDispatch();
 
   const handleOnPress = () => {
     dispatch(addTodo(task));
     setTask('');
-    setPressed(true);
   };
 
   useEffect(() => {
@@ -40,22 +39,26 @@ function Todo() {
           value={task}
         />
         <Button onPress={handleOnPress} title="Add" />
-
-        {list?.map(item => (
-          <View key={item.id} style={styles.itemStyle}>
-            <Text style={styles.text}>{item.task}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <View>
+            {objects.length !== 0 ? (
+              objects?.map(item => (
+                <View key={item.id} style={styles.itemStyle}>
+                  <Text style={styles.text}>{item.name}</Text>
+                </View>
+              ))
+            ) : (
+              <ActivityIndicator />
+            )}
           </View>
-        ))}
-
-        {objects.length !== 0 ? (
-          objects?.map(item => (
-            <View key={item.id} style={styles.itemStyle}>
-              <Text style={styles.text}>{item.name}</Text>
-            </View>
-          ))
-        ) : (
-          <ActivityIndicator />
-        )}
+          <View>
+            {list?.map(item => (
+              <View key={item.id} style={styles.itemStyle}>
+                <Text style={styles.text}>{item.task}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
       </View>
     </View>
   );
